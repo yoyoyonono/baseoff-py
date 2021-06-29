@@ -3,6 +3,7 @@ import functools
 
 shortNames: dict[int, str] = {}
 
+
 def shortName(b: int) -> str:
     if b <= 0:
         return ''
@@ -33,6 +34,7 @@ def shortName(b: int) -> str:
         shortNames[i] = abbv
     return shortNames[b]
 
+
 def getAbbv(s: str, k: int) -> str:
     str1: str = s[0]
     bits = bin(k)[2:]
@@ -43,21 +45,25 @@ def getAbbv(s: str, k: int) -> str:
             str1 += s[i]
     return str1
 
+
 def baseName(b: int) -> str:
     return removeHyphens(hyphenatedBaseName(b))
+
 
 def neutralNumber(b: int) -> str:
     return removeHyphens(hyphenatedNumberName(b))
 
+
 def removeHyphens(name: str) -> str:
     return name.replace('i-i', '-i').replace('i-u', 'i-').replace('e-u', '-u').replace('e-e', '-e').replace('o-i', '-i').replace('o-u', '-u').replace('o-e', '-e').replace('o-o', '-o').replace('a-i', '-i').replace('a-u', '-u').replace('a-e', '-e').replace('a-o', '-o').replace('-', '')
+
 
 @functools.cache
 def hyphenatedBaseName(b: int) -> str:
     name = ''
     if b < 0:
         return f'nega-{hyphenatedBaseName(b * -1)}'
-    
+
     match b:
         case 0:
             return 'nullary'
@@ -69,6 +75,7 @@ def hyphenatedBaseName(b: int) -> str:
             return 'baker\'s dozenal'
         case _:
             return suffix(b)
+
 
 @functools.cache
 def hyphenatedNumberName(b: int) -> str:
@@ -87,7 +94,7 @@ def hyphenatedNumberName(b: int) -> str:
             return 'baker\'s dozen'
         case _:
             return suffix_alt(b)
-    
+
 
 @functools.cache
 def suffix(n: int) -> str:
@@ -133,6 +140,7 @@ def suffix(n: int) -> str:
             else:
                 return f'{prefix(n // factor)}-{suffix(factor)}'
 
+
 def suffix_alt(n: int) -> str:
     match n:
         case 2:
@@ -175,6 +183,7 @@ def suffix_alt(n: int) -> str:
                 return f'un-{suffix_alt(n - 1)}'
             else:
                 return f'{prefix(n // factor)}-{suffix_alt(factor)}'
+
 
 @functools.cache
 def prefix(n: int) -> str:
@@ -220,6 +229,7 @@ def prefix(n: int) -> str:
             else:
                 return f'{prefix(n // factor)}-{prefix(factor)}'
 
+
 @functools.cache
 def factorize(n: int) -> int:
     n = int(n)
@@ -233,11 +243,13 @@ def factorize(n: int) -> int:
                 bestFactor = i
     return bestFactor
 
+
 @functools.cache
 def rootsInName(b: int) -> int:
     nr = hyphenatedBaseName(b)
     n = nr.replace('-', '')
     return len(nr) - len(n) + 1
+
 
 if __name__ == '__main__':
     import rich.progress
@@ -247,7 +259,7 @@ if __name__ == '__main__':
     base6 = baseconv.BaseConverter("012345")
     base12 = baseconv.BaseConverter("0123456789EX")
     base36 = baseconv.BaseConverter("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ")
-    bases = rich.table.Table(title = "Base Names")
+    bases = rich.table.Table(title="Base Names")
     bases.add_column("dec")
     bases.add_column("sex")
     bases.add_column("doz")
@@ -258,7 +270,8 @@ if __name__ == '__main__':
     bases.add_column("base")
     bases.add_column("abbv")
     for i in rich.progress.track(range(1, int(input("upper bound: ")) + 1)):
-        bases.add_row(str(i), base6.encode(i), base12.encode(i), baseconv.base16.encode(i), base36.encode(i), baseconv.base64.encode(i), neutralNumber(i), baseName(i), shortName(i))
+        bases.add_row(str(i), base6.encode(i), base12.encode(i), baseconv.base16.encode(
+            i), base36.encode(i), baseconv.base64.encode(i), neutralNumber(i), baseName(i), shortName(i))
     console = rich.console.Console()
     console2 = rich.console.Console(file=open('bases.txt', 'w'))
     console.print(bases)
