@@ -257,9 +257,9 @@ if __name__ == '__main__':
     bases.add_column("name")
     bases.add_column("base")
     bases.add_column("abbv")
-    for i in rich.progress.track(range(1, 2049)):
+    for i in rich.progress.track(range(1, int(input("upper bound: ")) + 1)):
         bases.add_row(str(i), base6.encode(i), base12.encode(i), baseconv.base16.encode(i), base36.encode(i), baseconv.base64.encode(i), neutralNumber(i), baseName(i), shortName(i))
-#    console = rich.console.Console()
+    console = rich.console.Console()
     console2 = rich.console.Console(file=open('bases.txt', 'w'))
-#    console.print(bases)
+    console.print(bases)
     console2.print(bases)
