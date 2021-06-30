@@ -143,6 +143,7 @@ def suffix(n: int) -> str:
                 return f'{prefix(n // factor)}-{suffix(factor)}'
 
 
+@functools.cache
 def suffix_alt(n: int) -> str:
     match n:
         case 2:
