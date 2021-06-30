@@ -5,7 +5,9 @@ shortNames: dict[int, str] = {}
 
 
 def shortName(b: int) -> str:
-    if b <= 0:
+    if b < 0:
+        return f'-{shortName(b * -1)}'
+    if b == 0:
         return ''
     minLen = 3
     if len(shortNames) >= b:
@@ -269,7 +271,7 @@ if __name__ == '__main__':
     bases.add_column("name")
     bases.add_column("base")
     bases.add_column("abbv")
-    for i in rich.progress.track(range(1, int(input("upper bound: ")) + 1)):
+    for i in rich.progress.track(range(int(input("lower bound (default 1): ") or 1), int(input("upper bound (default 100): ") or 100) + 1)):
         bases.add_row(str(i), base6.encode(i), base12.encode(i), baseconv.base16.encode(
             i), base36.encode(i), baseconv.base64.encode(i), neutralNumber(i), baseName(i), shortName(i))
     console = rich.console.Console()
